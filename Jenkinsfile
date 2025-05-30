@@ -29,13 +29,13 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: "$DOCKER_CREDENTIALS_ID",
+                        credentialsId: "%DOCKER_CREDENTIALS_ID%",
                         usernameVariable: 'DOCKER_USER',
                         passwordVariable: 'DOCKER_PASS'
                     )
                 ]) {
                     bat 'docker tag webapp:v1 shubhambehra/webapp:v1'
-                    bat 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                    bat 'echo "%DOCKER_PASS%" | docker login -u "%DOCKER_USER%" --password-stdin'
                     bat 'docker push shubhambehra/webapp:v1'
                 }
             }
