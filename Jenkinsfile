@@ -45,7 +45,7 @@ pipeline {
         stage('Deploy to K8s') {
             steps {
                 bat 'kubectl apply -f k8-deploy.yaml'
-                bat 'kubectl apply -f k8-service.yaml'
+                bat 'kubectl apply -f k8-service.yaml --validate=false'
                 bat 'kubectl rollout status deployment/webapp-deployment'
             }
         }
