@@ -15,13 +15,13 @@ pipeline {
 
         stage('Build WAR') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t webapp:v1 .'
+                bat 'docker build -t webapp:v1 .'
             }
         }
 
@@ -34,9 +34,9 @@ pipeline {
                         passwordVariable: 'DOCKER_PASS'
                     )
                 ]) {
-                    sh 'docker tag webapp:v1 shubhambehra/webapp:v1'
-                    sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
-                    sh 'docker push shubhambehra/webapp:v1'
+                    bat 'docker tag webapp:v1 shubhambehra/webapp:v1'
+                    bat 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                    bat 'docker push shubhambehra/webapp:v1'
                 }
             }
         }
@@ -45,13 +45,11 @@ pipeline {
         stage('Deploy to K8s') {
             steps {
                 // Apply deployment and NodePort service YAMLs
-                sh 'kubectl apply -f k8-deploy.yaml'
-                sh 'kubectl apply -f k8-service.yaml'
-                
-                // Wait for deployment rollout to finish
-                sh 'kubectl rollout status deployment/webapp-deployment'
+                bat 'kubectl apply -f k8-deploy.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
+                bat 'kubectl apply -f k8-service.yaml'
+                bat 'kubectl rollout status deployment/webapp-deployment'
             }
-        }
+        }/*  */
 
     }
-}                                                                                                                                   
+}  
