@@ -46,7 +46,7 @@ pipeline {
             steps {
                 // Apply deployment and NodePort service YAMLs
                 bat 'kubectl apply -f k8-deploy.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
-                bat 'kubectl apply -f k8-service.yaml'
+                bat 'kubectl apply -f k8-service.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
                 bat 'kubectl rollout status deployment/webapp-deployment'
             }
         }/*  */
