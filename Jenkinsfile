@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'shubhambehra/webapp:v1'
-        // This variable won't be used directly in credentialsId (see note)
         DOCKER_CREDENTIALS_ID = 'docker-credentials'
     }
 
@@ -29,13 +28,13 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'docker-credentials',  // Use the literal string, NOT the env var
+                    credentialsId: 'docker-credentials',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     bat '''
                         docker tag webapp:v1 shubhambehra/webapp:v1
-                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
                         docker push shubhambehra/webapp:v1
                     '''
                 }
@@ -44,12 +43,10 @@ pipeline {
 
         stage('Deploy to K8s') {
             steps {
-                // Apply deployment and NodePort service YAMLs
                 bat 'kubectl apply -f k8-deploy.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
                 bat 'kubectl apply -f k8-service.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
-                bat 'kubectl rollout status deployment/webapp-deployment'
+                bat 'kubectl rollout status deployment/webapp-deployment --validate=false --kubeconfig=C:\\Users\\shubh\\.kube\\config'
             }
-        }/*  */
-
+        }
     }
-}  
+}
