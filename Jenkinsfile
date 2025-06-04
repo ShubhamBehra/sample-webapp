@@ -45,7 +45,7 @@ pipeline {
             steps {
                 bat 'kubectl apply -f k8-deploy.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
                 bat 'kubectl apply -f k8-service.yaml --validate=false --server-side --kubeconfig=C:\\Users\\shubh\\.kube\\config'
-                bat 'kubectl rollout status deployment/webapp-deployment --kubeconfig=C:\\Users\\shubh\\.kube\\config'
+                bat 'kubectl rollout status deployment/sample-webapp --kubeconfig=C:\\Users\\shubh\\.kube\\config'
             }
         }
     }
